@@ -58,6 +58,7 @@ void ClearExecuteLine(void);
 char * RandomString(void);
 void SetSeedStyleColors(void);
 void myDarkGreyStyle(ImGuiStyle* dst);
+void myDarkBlueStyle(ImGuiStyle* dst);
 void CustomStyleColors(ImGuiStyle* dst);
 void myDefaultStyle(ImGuiStyle* dst);
 //void myStyle(ImGuiStyle* dst);
@@ -142,6 +143,7 @@ struct Preferences
 	bool bEnableToolbarLargeIcons = true;
 	bool bAutoIndentation = true;
 	bool bSmartAutoIndentation = true;
+	
 	//"Build options"
 	bool bWindows64Bit = false;
 	char cPathToCompiler[MAX_PATH];
@@ -322,7 +324,6 @@ struct Preferences
 	bool bDuplicateLineAlt = false;
 	int iDuplicateLineKey = 68;
 	char cDuplicateLineText[32];
-
 	bool bSceneLowFloatPrecision = true;
 	int iSceneLowFloatPrecision = 2;
 	char releasefillertoByteAlign; // MUST STAY 0.49.
@@ -385,7 +386,7 @@ struct Preferences
 
 	char cJDKPath[MAX_PATH] = "\0";
 
-	//custom style colors
+	// custom style colours
 	float gui_col_main_hue = 140.f / 255.f;
 	float gui_col_main_sat = 196.f / 255.f;
 	float gui_col_main_val = 142.f / 255.f;
@@ -402,11 +403,46 @@ struct Preferences
 	float gui_col_scroll_sat = 196.f / 255.f; 
 	float gui_col_scroll_val = 142.f / 255.f; 
 
-	//F1 browser help
+	// F1 browser help
 	bool bBrowserHelp = false;
 
-	//appgamekit news
-	bool bAppGameKitNews = true;
+	// Scrollbar arrow customisation
+	bool bEnableScrollbarArrows = true; // show arrow buttons on scrollbars
+	float fScrollbarArrowStep = 3.0f;   // multiplier applied to g.FontSize for per-click scroll
+
+	// HTML5 export: hide AGKS branding (logo/links) in generated template
+	bool bHideAGKSBranding = false;
+
+	// HTML5 export: open output folder after successful export
+	bool bOpenHTML5OutputFolder = false;
+
+	// Comment Lines shortcut
+	bool bCommentLinesCtrl = true;
+	bool bCommentLinesShift = true;
+	bool bCommentLinesAlt = false;
+	int iCommentLinesKey = 69; // E
+	char cCommentLinesText[32];
+
+	// Uncomment Lines shortcut
+	bool bUncommentLinesCtrl = true;
+	bool bUncommentLinesShift = false;
+	bool bUncommentLinesAlt = true;
+	int iUncommentLinesKey = 69; // E
+	char cUncommentLinesText[32];
+
+	// Toggle Comment Line shortcut
+	bool bToggleCommentCtrl = true;
+	bool bToggleCommentShift = false;
+	bool bToggleCommentAlt = false;
+	int iToggleCommentKey = 69; // E
+	char cToggleCommentText[32];
+
+	// breakpoint toggle shortcut
+	bool bBreakPointToggleCtrl = false;
+	bool bBreakPointToggleShift = false;
+	bool bBreakPointToggleAlt = false;
+	int iBreakPointToggleKey = 120;
+	char cBreakPointToggleText[32];
 
 };
 

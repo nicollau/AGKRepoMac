@@ -301,6 +301,8 @@ public:
 	void SetText(const std::string& aText);
 	void FindNext(void);
 	void ToggleLineComments(void);
+	void CommentSelectedLines(void);
+	void UncommentSelectedLines(void);
 	void FindPrev(void);
 	int WordCount(void);
 	void Replace(void);
