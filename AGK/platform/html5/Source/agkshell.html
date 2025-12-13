@@ -122,9 +122,9 @@
     </div>
     
     <div class="footer">
-        <a class="logo" href="https://www.appgamekit.com/studio" target="_blank"><img src="agks-logo-white.svg" alt="Made with AppGameKit Studio"></a>
+        <a class="logo" href="https://www.appgamekit.com/studio" target="_blank"><img src="logo.svg" alt="Made with AppGameKit Studio"></a>
 
-        <a class="link" href="#" onclick="Module.requestFullScreen(false,true)">Run in fullscreen mode</a>
+        <a class="link" href="#" onclick="Module.requestFullscreen(false,true)">Run in fullscreen mode</a>
         <a class="link" href="https://www.appgamekit.com/studio" target="_blank">Learn more about AppGameKit Studio</a>
     </div>
     
@@ -147,10 +147,36 @@
 
           return canvas;
         })(),
-        setStatus: function(text) {},
+        setStatus: function(text) {
+          if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+          if (text === Module.setStatus.last.text) return;
+          var m = text ? text.match(/([^(]+)\((\d+(?:\.\d+)?)\/(\d+)\)/) : null;
+          var now = Date.now();
+          if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+          Module.setStatus.last.time = now;
+          Module.setStatus.last.text = text;
+          if (agkStatus) {
+            if (text) {
+              if (m) {
+                var label = m[1].trim().replace(/\.\.\.$/, '...');
+                var current = parseFloat(m[2]);
+                var total = parseFloat(m[3]);
+                var pct = total > 0 ? Math.min(100, Math.floor((current / total) * 100)) : 0;
+                agkStatus.textContent = label + ' ' + pct + '%';
+              } else {
+                agkStatus.textContent = text;
+              }
+            }
+            else agkStatus.style.display = 'none';
+          }
+        },
         totalDependencies: 0,
-        monitorRunDependencies: function(left) {}
+        monitorRunDependencies: function(left) {
+          this.totalDependencies = Math.max(this.totalDependencies, left);
+          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        }
       };
+
       window.onerror = function(text) {
         // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
         var agkStatus = document.getElementById("agkstatus");
@@ -164,6 +190,94 @@
     </script>
 
     {{{ SCRIPT }}}
+
+    <script>
+      (function () {
+        var listenersReady = false;
+
+        function getCanvas() {
+          return (typeof Module !== "undefined" && Module.canvas) ? Module.canvas : null;
+        }
+
+        function isFullscreenCanvas(canvas) {
+          if (!canvas || !canvas.parentNode) return false;
+          var parent = canvas.parentNode;
+          return document.fullscreenElement === parent ||
+            document.webkitFullscreenElement === parent ||
+            document.mozFullScreenElement === parent ||
+            document.msFullscreenElement === parent ||
+            document.fullscreenElement === canvas ||
+            document.webkitFullscreenElement === canvas;
+        }
+
+        function getViewportSize() {
+          var viewportWidth = (window.visualViewport && window.visualViewport.width) ||
+            window.innerWidth ||
+            (document.documentElement && document.documentElement.clientWidth) ||
+            (typeof screen !== "undefined" ? screen.width : 0);
+
+          var viewportHeight = (window.visualViewport && window.visualViewport.height) ||
+            window.innerHeight ||
+            (document.documentElement && document.documentElement.clientHeight) ||
+            (typeof screen !== "undefined" ? screen.height : 0);
+
+          var ratio = window.devicePixelRatio || 1;
+          return {
+            width: Math.round(viewportWidth * ratio),
+            height: Math.round(viewportHeight * ratio)
+          };
+        }
+
+        function applyFullscreenSize() {
+          if (!window.Browser || typeof Browser.setCanvasSize !== "function") return;
+          var canvas = getCanvas();
+          if (!isFullscreenCanvas(canvas)) return;
+          var target = getViewportSize();
+          if (!target.width || !target.height) return;
+          if (Math.abs(canvas.width - target.width) < 2 && Math.abs(canvas.height - target.height) < 2) return;
+          Browser.setCanvasSize(target.width, target.height, false);
+        }
+
+        function scheduleResizeSync(delay) {
+          if (delay) {
+            setTimeout(function () { window.requestAnimationFrame(applyFullscreenSize); }, delay);
+          }
+          else {
+            window.requestAnimationFrame(applyFullscreenSize);
+          }
+        }
+
+        function attachListeners() {
+          if (listenersReady) return;
+          listenersReady = true;
+
+          window.addEventListener("orientationchange", function () {
+            scheduleResizeSync(100);
+          });
+
+          window.addEventListener("resize", function () {
+            scheduleResizeSync(0);
+          });
+
+          ["fullscreenchange", "webkitfullscreenchange", "mozfullscreenchange", "MSFullscreenChange"].forEach(function (evt) {
+            document.addEventListener(evt, function () {
+              scheduleResizeSync(50);
+            });
+          });
+        }
+
+        function waitForRuntime() {
+          if (window.Browser && typeof Browser.setCanvasSize === "function" && getCanvas()) {
+            attachListeners();
+            scheduleResizeSync(0);
+            return;
+          }
+          setTimeout(waitForRuntime, 100);
+        }
+
+        waitForRuntime();
+      })();
+    </script>
 
   </body>
 </html>
