@@ -403,6 +403,7 @@
 		4AF7CA3E1BD7181B0021ED1E /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF7CA3D1BD7181B0021ED1E /* Quartz.framework */; };
 		4AF7CA401BD718230021ED1E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF7CA3F1BD718230021ED1E /* CoreLocation.framework */; };
 		4AF7CA421BD7182C0021ED1E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF7CA411BD7182C0021ED1E /* AVFoundation.framework */; };
+		AAGC0001AAGC0001AAGC0001 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAGC0002AAGC0002AAGC0002 /* GameController.framework */; };
 		4AF7CA561BD724F20021ED1E /* AGKMotionState.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AF7CA431BD724F20021ED1E /* AGKMotionState.h */; };
 		4AF7CA571BD724F20021ED1E /* AGKToBullet.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AF7CA441BD724F20021ED1E /* AGKToBullet.h */; };
 		4AF7CA581BD724F20021ED1E /* AGO.h in Headers */ = {isa = PBXBuildFile; fileRef = 4AF7CA451BD724F20021ED1E /* AGO.h */; };
@@ -1948,6 +1949,7 @@
 		4AF7CA3D1BD7181B0021ED1E /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		4AF7CA3F1BD718230021ED1E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4AF7CA411BD7182C0021ED1E /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		AAGC0002AAGC0002AAGC0002 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 		4AF7CA431BD724F20021ED1E /* AGKMotionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGKMotionState.h; path = common/include/AGKMotionState.h; sourceTree = "<group>"; };
 		4AF7CA441BD724F20021ED1E /* AGKToBullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGKToBullet.h; path = common/include/AGKToBullet.h; sourceTree = "<group>"; };
 		4AF7CA451BD724F20021ED1E /* AGO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AGO.h; path = common/include/AGO.h; sourceTree = "<group>"; };
@@ -2702,7 +2704,7 @@
 		4AF7CEDE1BD7254A0021ED1E /* vecidx_aos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vecidx_aos.h; sourceTree = "<group>"; };
 		4AF7CEDF1BD7254A0021ED1E /* vectormath_aos.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vectormath_aos.h; sourceTree = "<group>"; };
 		4AF7CEE01BD7254A0021ED1E /* vmInclude.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vmInclude.h; sourceTree = "<group>"; };
-		9B9C6C6113789621008387B8 /* Particles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particles.h; path = common/Include/Particles.h; sourceTree = "<group>"; };
+		9B9C6C6113789621008387B8 /* Particles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Particles.h; path = common/include/Particles.h; sourceTree = "<group>"; };
 		9B9C6C6313789630008387B8 /* Particles.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = Particles.cpp; path = common/Source/Particles.cpp; sourceTree = "<group>"; };
 		D2AAC046055464E500DB518D /* libAGKMac.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAGKMac.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D832674F15E5091C00FDCE97 /* sha1.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = sha1.cpp; path = common/Source/sha1.cpp; sourceTree = "<group>"; };
@@ -2736,8 +2738,8 @@
 		D88462E016247F6000FFDEA4 /* Face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face.h; sourceTree = "<group>"; };
 		D88462E116247F6000FFDEA4 /* TreeNode.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TreeNode.cpp; sourceTree = "<group>"; };
 		D88462E216247F6000FFDEA4 /* TreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TreeNode.h; sourceTree = "<group>"; };
-		D88E1E49134BFB78008B7211 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Network.h; path = common/Include/Network.h; sourceTree = "<group>"; };
-		D88E1E4A134BFB78008B7211 /* NetworkCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkCommon.h; path = common/Include/NetworkCommon.h; sourceTree = "<group>"; };
+		D88E1E49134BFB78008B7211 /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Network.h; path = common/include/Network.h; sourceTree = "<group>"; };
+		D88E1E4A134BFB78008B7211 /* NetworkCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NetworkCommon.h; path = common/include/NetworkCommon.h; sourceTree = "<group>"; };
 		D88E1E4E134BFB84008B7211 /* Network.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = Network.cpp; path = common/Source/Network.cpp; sourceTree = "<group>"; };
 		D88E1E5A134BFBE3008B7211 /* MacNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MacNetwork.h; path = platform/mac/Source/MacNetwork.h; sourceTree = "<group>"; };
 		D88E1E5C134BFBED008B7211 /* MacNetwork.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = MacNetwork.cpp; path = platform/mac/Source/MacNetwork.cpp; sourceTree = "<group>"; };
@@ -2754,25 +2756,25 @@
 		D88F5B36131D9EF7003157CE /* Physics.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = Physics.cpp; path = common/Source/Physics.cpp; sourceTree = "<group>"; };
 		D88F5B37131D9EF7003157CE /* uString.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = uString.cpp; path = common/Source/uString.cpp; sourceTree = "<group>"; };
 		D88F5B38131D9EF7003157CE /* Wrapper.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = Wrapper.cpp; path = common/Source/Wrapper.cpp; sourceTree = "<group>"; };
-		D88F5B48131D9F11003157CE /* cForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cForce.h; path = common/Include/cForce.h; sourceTree = "<group>"; };
-		D88F5B49131D9F11003157CE /* cHashedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cHashedList.h; path = common/Include/cHashedList.h; sourceTree = "<group>"; };
-		D88F5B4A131D9F11003157CE /* cImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cImage.h; path = common/Include/cImage.h; sourceTree = "<group>"; };
-		D88F5B4B131D9F11003157CE /* cNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cNode.h; path = common/Include/cNode.h; sourceTree = "<group>"; };
-		D88F5B4C131D9F11003157CE /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Common.h; path = common/Include/Common.h; sourceTree = "<group>"; };
-		D88F5B4D131D9F11003157CE /* cSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cSound.h; path = common/Include/cSound.h; sourceTree = "<group>"; };
-		D88F5B4E131D9F11003157CE /* cSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cSprite.h; path = common/Include/cSprite.h; sourceTree = "<group>"; };
-		D88F5B4F131D9F11003157CE /* cSpriteMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cSpriteMgr.h; path = common/Include/cSpriteMgr.h; sourceTree = "<group>"; };
-		D88F5B50131D9F11003157CE /* cText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cText.h; path = common/Include/cText.h; sourceTree = "<group>"; };
-		D88F5B51131D9F11003157CE /* cTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cTouch.h; path = common/Include/cTouch.h; sourceTree = "<group>"; };
-		D88F5B52131D9F11003157CE /* DebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DebugDraw.h; path = common/Include/DebugDraw.h; sourceTree = "<group>"; };
-		D88F5B53131D9F11003157CE /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = common/Include/Globals.h; sourceTree = "<group>"; };
-		D88F5B55131D9F11003157CE /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Physics.h; path = common/Include/Physics.h; sourceTree = "<group>"; };
-		D88F5B56131D9F11003157CE /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = common/Include/Thread.h; sourceTree = "<group>"; };
-		D88F5B57131D9F11003157CE /* uString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uString.h; path = common/Include/uString.h; sourceTree = "<group>"; };
-		D88F5B58131D9F11003157CE /* Wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wrapper.h; path = common/Include/Wrapper.h; sourceTree = "<group>"; };
-		D88F5B6A131D9F1C003157CE /* agk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = agk.h; path = common/Include/agk.h; sourceTree = "<group>"; };
+		D88F5B48131D9F11003157CE /* cForce.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cForce.h; path = common/include/cForce.h; sourceTree = "<group>"; };
+		D88F5B49131D9F11003157CE /* cHashedList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cHashedList.h; path = common/include/cHashedList.h; sourceTree = "<group>"; };
+		D88F5B4A131D9F11003157CE /* cImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cImage.h; path = common/include/cImage.h; sourceTree = "<group>"; };
+		D88F5B4B131D9F11003157CE /* cNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cNode.h; path = common/include/cNode.h; sourceTree = "<group>"; };
+		D88F5B4C131D9F11003157CE /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Common.h; path = common/include/Common.h; sourceTree = "<group>"; };
+		D88F5B4D131D9F11003157CE /* cSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cSound.h; path = common/include/cSound.h; sourceTree = "<group>"; };
+		D88F5B4E131D9F11003157CE /* cSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cSprite.h; path = common/include/cSprite.h; sourceTree = "<group>"; };
+		D88F5B4F131D9F11003157CE /* cSpriteMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cSpriteMgr.h; path = common/include/cSpriteMgr.h; sourceTree = "<group>"; };
+		D88F5B50131D9F11003157CE /* cText.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cText.h; path = common/include/cText.h; sourceTree = "<group>"; };
+		D88F5B51131D9F11003157CE /* cTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cTouch.h; path = common/include/cTouch.h; sourceTree = "<group>"; };
+		D88F5B52131D9F11003157CE /* DebugDraw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DebugDraw.h; path = common/include/DebugDraw.h; sourceTree = "<group>"; };
+		D88F5B53131D9F11003157CE /* Globals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Globals.h; path = common/include/Globals.h; sourceTree = "<group>"; };
+		D88F5B55131D9F11003157CE /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Physics.h; path = common/include/Physics.h; sourceTree = "<group>"; };
+		D88F5B56131D9F11003157CE /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Thread.h; path = common/include/Thread.h; sourceTree = "<group>"; };
+		D88F5B57131D9F11003157CE /* uString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uString.h; path = common/include/uString.h; sourceTree = "<group>"; };
+		D88F5B58131D9F11003157CE /* Wrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Wrapper.h; path = common/include/Wrapper.h; sourceTree = "<group>"; };
+		D88F5B6A131D9F1C003157CE /* agk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = agk.h; path = common/include/agk.h; sourceTree = "<group>"; };
 		D88F5C5B131DA3A3003157CE /* MacCore.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MacCore.mm; path = platform/mac/Source/MacCore.mm; sourceTree = "<group>"; };
-		D89067DB13841352001D2F88 /* Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joystick.h; path = common/Include/Joystick.h; sourceTree = "<group>"; };
+		D89067DB13841352001D2F88 /* Joystick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Joystick.h; path = common/include/Joystick.h; sourceTree = "<group>"; };
 		D89067DD1384135E001D2F88 /* Joystick.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = Joystick.cpp; path = common/Source/Joystick.cpp; sourceTree = "<group>"; };
 		D899CA5F140D21A6005A5A3A /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		D899CA61140D21B3005A5A3A /* b2BroadPhase.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
@@ -2865,8 +2867,8 @@
 		D899CAFA140D21FC005A5A3A /* b2WheelJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2WheelJoint.h; sourceTree = "<group>"; };
 		D899CB12140D2210005A5A3A /* b2Rope.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = b2Rope.cpp; path = Rope/b2Rope.cpp; sourceTree = "<group>"; };
 		D899CB13140D2210005A5A3A /* b2Rope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = b2Rope.h; path = Rope/b2Rope.h; sourceTree = "<group>"; };
-		D8A06916134E5A2E005C59DC /* libImages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libImages.h; path = common/Include/libImages.h; sourceTree = "<group>"; };
-		D8A5D68D13200C52000446C9 /* cFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cFile.h; path = common/Include/cFile.h; sourceTree = "<group>"; };
+		D8A06916134E5A2E005C59DC /* libImages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libImages.h; path = common/include/libImages.h; sourceTree = "<group>"; };
+		D8A5D68D13200C52000446C9 /* cFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cFile.h; path = common/include/cFile.h; sourceTree = "<group>"; };
 		D8A5D6AC13200D10000446C9 /* cFile.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = cFile.cpp; path = common/Source/cFile.cpp; sourceTree = "<group>"; };
 		D8BC8ABA152121470042EDA1 /* adler32.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = adler32.c; sourceTree = "<group>"; };
 		D8BC8ABB152121470042EDA1 /* compress.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = compress.c; sourceTree = "<group>"; };
@@ -3105,6 +3107,7 @@
 			files = (
 				4AF7CA421BD7182C0021ED1E /* AVFoundation.framework in Frameworks */,
 				4AF7CA401BD718230021ED1E /* CoreLocation.framework in Frameworks */,
+				AAGC0001AAGC0001AAGC0001 /* GameController.framework in Frameworks */,
 				4AF7CA3E1BD7181B0021ED1E /* Quartz.framework in Frameworks */,
 				4AF7CA3C1BD718130021ED1E /* OpenGL.framework in Frameworks */,
 				4AF7CA3A1BD7180B0021ED1E /* OpenAL.framework in Frameworks */,
@@ -5043,6 +5046,7 @@
 				4A163CA524041EC700330BB2 /* libMoltenVKMacOS.a */,
 				4AF7CA411BD7182C0021ED1E /* AVFoundation.framework */,
 				4AF7CA3F1BD718230021ED1E /* CoreLocation.framework */,
+				AAGC0002AAGC0002AAGC0002 /* GameController.framework */,
 				4AF7CA3D1BD7181B0021ED1E /* Quartz.framework */,
 				4AF7CA3B1BD718130021ED1E /* OpenGL.framework */,
 				4AF7CA391BD7180B0021ED1E /* OpenAL.framework */,
@@ -7072,6 +7076,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					IDE_MAC,
 					HAVE_CONFIG_H,
+					NDEBUG,
 				);
 				HEADER_SEARCH_PATHS = (
 					common,
@@ -7093,7 +7098,7 @@
 					"$(PROJECT_DIR)/renderer/MoltenVK/Lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = AGKMac;
 				SDKROOT = macosx;
 				SYMROOT = ./platform/mac/Lib;
@@ -7199,7 +7204,7 @@
 					"$(PROJECT_DIR)/renderer/MoltenVK/Lib",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = AGKMac;
 				SDKROOT = macosx;
 				SYMROOT = ./platform/mac/Lib;

@@ -1,4 +1,5 @@
 #import <AVFoundation/AVFoundation.h>
+#import <GameController/GameController.h>
 //#import <Cocoa/Cocoa.h>
 #include "agk.h"
 #include "OpenGL2/OpenGL2.h"
@@ -952,29 +953,10 @@ void agk::PlatformSetDevicePtr( void* ptr )
 	//NSWindow *window = [[[NSApplication sharedApplication] windows] objectAtIndex:0];
 }
 
-NSArray * joysticks = 0;
-
 void agk::InitJoysticks()
 {
-    /*
-    // joystick setup
-    g_pJoystickListener = [ JoystickListener alloc ];
-    
-    // on the MAC I get 'does not recognise selector exception!'
-    // requires the DDHidLib from "platform/mac/DDHidLib"
-    if ( !joysticks )
-        joysticks = [[DDHidJoystick allJoysticks] retain ];
-    
-    for ( int i = 0; i < [joysticks count] && i < AGK_NUM_JOYSTICKS; i++ )
-    {
-        DDHidJoystick *pJoystick = [joysticks objectAtIndex:i];
-        
-        m_pJoystick[ i ] = new cJoystick( pJoystick );
-        
-        [ pJoystick setDelegate:g_pJoystickListener ];
-        [ pJoystick startListening ];
-    }
-     */
+    // Initial scan — picks up controllers already connected at launch.
+    cJoystick::DetectJoysticks();
 }
 
 void agk::PlatformInitGraphicsCommon()
@@ -4777,18 +4759,118 @@ int agk::GetGPSSensorExists()
 
 void cJoystick::DetectJoysticks()
 {
-    /*
-    // this takes over 3 milliseconds when a controller is connected
-    float start = agk::Timer();
-    NSArray *joysticks = [DDHidJoystick allJoysticks];
-    float end = agk::Timer() - start;
-    NSLog( @"%f", end );
-     */
+    // GCController gives one logical device per physical controller,
+    // regardless of how many HID interfaces the hardware exposes.
+    NSArray<GCController*> *controllers = [GCController controllers];
+
+    // Mark slots for controllers that are no longer present
+    for ( int i = 0; i < AGK_NUM_JOYSTICKS; i++ )
+    {
+        if ( !agk::m_pJoystick[i] ) continue;
+        GCController *existing = (__bridge GCController *)agk::m_pJoystick[i]->m_pDevice;
+        bool found = false;
+        for ( GCController *c in controllers )
+            if ( c == existing ) { found = true; break; }
+        if ( !found )
+        {
+            delete agk::m_pJoystick[i];
+            agk::m_pJoystick[i] = 0;
+        }
+    }
+
+    // Add newly connected controllers
+    for ( GCController *controller in controllers )
+    {
+        void *pDevice = (__bridge void *)controller;
+
+        // Check if already registered
+        bool alreadyAdded = false;
+        for ( int i = 0; i < AGK_NUM_JOYSTICKS; i++ )
+        {
+            if ( agk::m_pJoystick[i] && agk::m_pJoystick[i]->m_pDevice == pDevice )
+            {
+                alreadyAdded = true;
+                break;
+            }
+        }
+        if ( alreadyAdded ) continue;
+
+        // Only support controllers that have a gamepad profile
+        if ( !controller.extendedGamepad && !controller.gamepad ) continue;
+
+        for ( int i = 0; i < AGK_NUM_JOYSTICKS; i++ )
+        {
+            if ( !agk::m_pJoystick[i] )
+            {
+                agk::m_pJoystick[i] = new cJoystick( pDevice );
+                const char *name = [controller.vendorName UTF8String];
+                if ( name ) agk::m_pJoystick[i]->SetName( name );
+                break;
+            }
+        }
+    }
 }
 
 void cJoystick::PlatformUpdate()
 {
-	// mac joysticks updated asynchronously
+    GCController *controller = (__bridge GCController *)m_pDevice;
+    if ( !controller )
+    {
+        m_iConnected = 0;
+        return;
+    }
+
+    // Prefer extendedGamepad (Xbox One / PS4 / Switch Pro) over basic gamepad
+    GCExtendedGamepad *ext = controller.extendedGamepad;
+    if ( ext )
+    {
+        m_fX  = ext.leftThumbstick.xAxis.value;
+        m_fY  = -ext.leftThumbstick.yAxis.value;   // AGK Y+ = down
+        m_fRX = ext.rightThumbstick.xAxis.value;
+        m_fRY = -ext.rightThumbstick.yAxis.value;
+        m_fZ  = ext.leftTrigger.value;              // [0,1]
+        m_fRZ = ext.rightTrigger.value;             // [0,1]
+
+        m_iNumButtons = 17;
+
+        // Match AGK Windows button order (XInput):
+        // 0=A 1=B 2=X 3=Y 4=LB 5=RB 6=Back 7=Start 8=L3 9=R3
+        // 10=DpadUp 11=DpadDown 12=DpadLeft 13=DpadRight 14=Home(Guide)
+        m_iButtons[0]  = ext.buttonA.isPressed ? 1 : 0;
+        m_iButtons[1]  = ext.buttonB.isPressed ? 1 : 0;
+        m_iButtons[2]  = ext.buttonX.isPressed ? 1 : 0;
+        m_iButtons[3]  = ext.buttonY.isPressed ? 1 : 0;
+        m_iButtons[4]  = ext.leftShoulder.isPressed ? 1 : 0;
+        m_iButtons[5]  = ext.rightShoulder.isPressed ? 1 : 0;
+        m_iButtons[6]  = ext.buttonOptions ? (ext.buttonOptions.isPressed ? 1 : 0) : 0;
+        m_iButtons[7]  = ext.buttonMenu.isPressed ? 1 : 0;
+        m_iButtons[8]  = ext.leftThumbstickButton  ? (ext.leftThumbstickButton.isPressed  ? 1 : 0) : 0;
+        m_iButtons[9]  = ext.rightThumbstickButton ? (ext.rightThumbstickButton.isPressed ? 1 : 0) : 0;
+        m_iButtons[12] = ext.dpad.left.isPressed  ? 1 : 0;
+        m_iButtons[13] = ext.dpad.up.isPressed    ? 1 : 0;
+        m_iButtons[14] = ext.dpad.right.isPressed ? 1 : 0;
+        m_iButtons[15] = ext.dpad.down.isPressed  ? 1 : 0;
+        m_iButtons[16] = ext.buttonHome ? (ext.buttonHome.isPressed ? 1 : 0) : 0;
+    }
+    else
+    {
+        GCGamepad *gp = controller.gamepad;
+        if ( !gp ) return;
+
+        m_fX  = gp.dpad.xAxis.value;
+        m_fY  = -gp.dpad.yAxis.value;
+        m_fRX = 0; m_fRY = 0; m_fZ = 0; m_fRZ = 0;
+
+        m_iNumButtons = 8;
+        m_iButtons[0] = gp.buttonA.isPressed ? 1 : 0;
+        m_iButtons[1] = gp.buttonB.isPressed ? 1 : 0;
+        m_iButtons[2] = gp.buttonX.isPressed ? 1 : 0;
+        m_iButtons[3] = gp.buttonY.isPressed ? 1 : 0;
+        m_iButtons[4] = gp.leftShoulder.isPressed  ? 1 : 0;
+        m_iButtons[5] = gp.rightShoulder.isPressed ? 1 : 0;
+        m_iButtons[6] = 0;
+        m_iButtons[7] = 0;
+    }
 }
 
 void agk::SetRawMouseVisible( int visible )
