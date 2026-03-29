@@ -27,7 +27,11 @@
 #endif
 
 #define B2_NOT_USED(x) ((void)(x))
-#define b2Assert(A) assert(A)
+#if defined(b2DEBUG)
+	#define b2Assert(A) assert(A)
+#else
+	#define b2Assert(A)
+#endif
 
 typedef signed char	int8;
 typedef signed short int16;
