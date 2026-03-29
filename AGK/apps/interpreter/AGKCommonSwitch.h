@@ -2571,9 +2571,195 @@ end:
 #endif
 
 #if defined(AGK_LINUX) || defined(AGK_MACOS)
-	#ifndef __x86_64__
-		RuntimeError( "Plugin commands are not supported on 32bit Linux" );
-	#else
+	#if defined(__aarch64__)
+		float *pFloatParams = new float[ pCommand->iNumParams ];
+		void **pIntParams = new void*[ pCommand->iNumParams ];
+		parameter *pStackParams = new parameter[ pCommand->iNumParams ];
+
+		// reverse parameters
+		for( int i = pCommand->iNumParams-1; i >= 0; i-- )
+		{
+			if ( pCommand->iParamsTypes[i] == AGK_VARIABLE_INTEGER )
+				pStackParams[ i ].i = m_pStack[ --m_iStackPtr ].i;
+			else if ( pCommand->iParamsTypes[i] == AGK_VARIABLE_FLOAT )
+				pStackParams[ i ].f = m_pStack[ --m_iStackPtr ].f;
+			else if ( pCommand->iParamsTypes[i] == AGK_VARIABLE_STRING )
+				pStackParams[ i ].s = m_pStrStack[ --m_iStrStackPtr ].GetStr();
+		}
+
+		// distribute into float registers (s0-s7), int/pointer registers (x0-x7), and stack overflow
+		int floatCount = 0;
+		int intCount = 0;
+		int stackCount = 0;
+		for( int i = 0; i < pCommand->iNumParams; i++ )
+		{
+			if ( pCommand->iParamsTypes[i] == AGK_VARIABLE_INTEGER )
+			{
+				if ( intCount < 8 )
+					pIntParams[ intCount++ ] = (void*)(intptr_t) pStackParams[ i ].i;
+				else
+				{
+					pStackParams[ stackCount ].i = pStackParams[ i ].i;
+					stackCount++;
+				}
+			}
+			else if ( pCommand->iParamsTypes[i] == AGK_VARIABLE_FLOAT )
+			{
+				if ( floatCount < 8 )
+					pFloatParams[ floatCount++ ] = pStackParams[ i ].f;
+				else
+				{
+					pStackParams[ stackCount ].f = pStackParams[ i ].f;
+					stackCount++;
+				}
+			}
+			else if ( pCommand->iParamsTypes[i] == AGK_VARIABLE_STRING )
+			{
+				if ( intCount < 8 )
+					pIntParams[ intCount++ ] = (void*) pStackParams[ i ].s;
+				else
+				{
+					pStackParams[ stackCount ].s = pStackParams[ i ].s;
+					stackCount++;
+				}
+			}
+		}
+
+		parameter result; result.s = 0;
+
+		// AAPCS64: integer/pointer args in x0-x7, float args in s0-s7, overflow on stack in order.
+		// x19 is callee-saved; we use it to preserve sp across the blr so we can restore it.
+		// All caller-saved registers (x0-x17, v0-v7) are listed in the clobber set so the
+		// compiler places long-lived inputs in callee-saved registers (x20-x28).
+		asm volatile (
+			"mov x16, %[func] \n\t"        // stash fn ptr before stack ops may disturb it
+
+			// save sp in callee-saved x19; it survives the blr call
+			"mov x19, sp \n\t"
+
+			// allocate stack space for overflow params (stackCount*8, 16-byte aligned)
+			"mov x9, %[numS] \n\t"
+			"cbz x9, 2f \n\t"
+			"lsl x9, x9, #3 \n\t"
+			"add x9, x9, #15 \n\t"
+			"and x9, x9, #-16 \n\t"
+			"sub sp, sp, x9 \n\t"
+
+			// copy overflow params to stack in ascending order (AAPCS64 requirement)
+			"mov x9, %[numS] \n\t"
+			"mov x11, %[params3] \n\t"
+			"mov x12, #0 \n\t"
+			"1: \n\t"
+			"ldr x13, [x11, x12, lsl #3] \n\t"
+			"str x13, [sp, x12, lsl #3] \n\t"
+			"add x12, x12, #1 \n\t"
+			"cmp x12, x9 \n\t"
+			"blt 1b \n\t"
+			"2: \n\t"
+
+			// load float params into s0-s7
+			"mov x9, %[numF] \n\t"
+			"cbz x9, 3f \n\t"
+			"mov x11, %[params] \n\t"
+			"ldr s0, [x11] \n\t"
+			"cmp x9, #1 \n\t"
+			"beq 3f \n\t"
+			"ldr s1, [x11, #4] \n\t"
+			"cmp x9, #2 \n\t"
+			"beq 3f \n\t"
+			"ldr s2, [x11, #8] \n\t"
+			"cmp x9, #3 \n\t"
+			"beq 3f \n\t"
+			"ldr s3, [x11, #12] \n\t"
+			"cmp x9, #4 \n\t"
+			"beq 3f \n\t"
+			"ldr s4, [x11, #16] \n\t"
+			"cmp x9, #5 \n\t"
+			"beq 3f \n\t"
+			"ldr s5, [x11, #20] \n\t"
+			"cmp x9, #6 \n\t"
+			"beq 3f \n\t"
+			"ldr s6, [x11, #24] \n\t"
+			"cmp x9, #7 \n\t"
+			"beq 3f \n\t"
+			"ldr s7, [x11, #28] \n\t"
+			"3: \n\t"
+
+			// load int/pointer params into x0-x7
+			"mov x9, %[numI] \n\t"
+			"cbz x9, 4f \n\t"
+			"mov x11, %[params2] \n\t"
+			"ldr x0, [x11] \n\t"
+			"cmp x9, #1 \n\t"
+			"beq 4f \n\t"
+			"ldr x1, [x11, #8] \n\t"
+			"cmp x9, #2 \n\t"
+			"beq 4f \n\t"
+			"ldr x2, [x11, #16] \n\t"
+			"cmp x9, #3 \n\t"
+			"beq 4f \n\t"
+			"ldr x3, [x11, #24] \n\t"
+			"cmp x9, #4 \n\t"
+			"beq 4f \n\t"
+			"ldr x4, [x11, #32] \n\t"
+			"cmp x9, #5 \n\t"
+			"beq 4f \n\t"
+			"ldr x5, [x11, #40] \n\t"
+			"cmp x9, #6 \n\t"
+			"beq 4f \n\t"
+			"ldr x6, [x11, #48] \n\t"
+			"cmp x9, #7 \n\t"
+			"beq 4f \n\t"
+			"ldr x7, [x11, #56] \n\t"
+			"4: \n\t"
+
+			// call the plugin function
+			"blr x16 \n\t"
+
+			// restore sp (x19 is callee-saved, still valid after blr)
+			"mov sp, x19 \n\t"
+
+			// save return value: int/ptr returned in x0, float returned in s0
+			"cmp %[rt], #2 \n\t"       // AGK_VARIABLE_FLOAT == 2
+			"beq 5f \n\t"
+			"str x0, %[result] \n\t"
+			"b 6f \n\t"
+			"5: \n\t"
+			"str s0, %[result] \n\t"
+			"6: \n\t"
+
+			: [result]  "=m" (result)
+			: [func]    "r"  (pFunc),
+			  [rt]      "r"  ((long)returnType),
+			  [params]  "r"  (pFloatParams),
+			  [numF]    "r"  ((long)floatCount),
+			  [params2] "r"  (pIntParams),
+			  [numI]    "r"  ((long)intCount),
+			  [params3] "r"  (pStackParams),
+			  [numS]    "r"  ((long)stackCount)
+			: "memory",
+			  "x0",  "x1",  "x2",  "x3",  "x4",  "x5",  "x6",  "x7",
+			  "x8",  "x9",  "x10", "x11", "x12", "x13", "x14", "x15",
+			  "x16", "x17", "x19", "x30",
+			  "v0",  "v1",  "v2",  "v3",  "v4",  "v5",  "v6",  "v7"
+		);
+
+		switch( pCommand->iReturnType )
+		{
+			case AGK_VARIABLE_INTEGER: m_pStack[ m_iStackPtr++ ].i = result.i; break;
+			case AGK_VARIABLE_FLOAT: m_pStack[ m_iStackPtr++ ].f = result.f; break;
+			case AGK_VARIABLE_STRING:
+			{
+				m_pStrStack[ m_iStrStackPtr++ ].SetStr( result.s );
+				delete [] result.s;
+				break;
+			}
+		}
+
+		delete [] pStackParams;
+		delete [] pIntParams;
+		delete [] pFloatParams;
+	#elif defined(__x86_64__)
 		float *pFloatParams = new float[ pCommand->iNumParams ];
 		void **pNonFloatParams = new void*[ pCommand->iNumParams ];
 		parameter *pStackParams = new parameter[ pCommand->iNumParams ];
@@ -2784,6 +2970,8 @@ end:
 		delete [] pStackParams;
 		delete [] pNonFloatParams;
 		delete [] pFloatParams;
+	#else
+		RuntimeError( "Plugin commands are not supported on this platform" );
 	#endif
 #endif
 
